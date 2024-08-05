@@ -1,0 +1,78 @@
+# -----------------------------------------------------
+# nginx alias
+# -----------------------------------------------------
+alias ng-reload="sudo nginx -s reload"
+alias ng-stop="sudo nginx -s stop"
+alias ng-start="sudo nginx"
+alias ng-config="subl /usr/local/etc/nginx/nginx.conf"
+
+alias ng-log-access="tail -f /usr/local/var/log/nginx/access.log"
+alias ng-log-error="tail -f /usr/local/var/log/nginx/error.log"
+
+
+# -----------------------------------------------------
+# DOCKER alias
+# -----------------------------------------------------
+alias dps='docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.Image}}" --filter=status=running'
+alias dps-filter='docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}\t{{.Image}}" | egrep '
+alias dpsa='docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}\t{{.Image}}"'
+
+# View
+alias dcontainers="docker container ls -a"
+alias dinfo="docker system df -v"
+alias dimages="docker image ls"
+alias dvolumes="docker volume ls"
+alias dnetworks="docker network ls"
+
+# remove
+alias drm-none="drm-image \$(docker images -f "dangling=true" -q)"
+alias drm-image="docker image rm"
+alias drm-volume="docker volume rm"
+alias drm-network="docker network rm"
+
+alias drm-images="docker image prune"
+alias drm-volumes="docker volume prune"
+alias drm-networks="docker network prune"
+
+alias drm-all-exited="dps --filter=status=exited --format "{{.ID}}" | xargs docker rm -f"
+alias drm-all-images="docker system prune --all" # delete all unused images and volumes
+alias drm-all-volumes="docker system prune --volumes" # remove all unused volumes
+
+# -----------------------------------------------------
+# DOCKER COMPOSE alias
+# -----------------------------------------------------
+
+alias dclog="docker compose logs -f"
+alias dcup="docker compose up -d"
+alias dcdw="docker compose down"
+alias dcconfig="docker compose config"
+alias dcexec="docker compose exec "
+alias dinspect-image-label="docker image inspect -f '.{{.ContainerConfig.Labels}}'"
+alias dbash-exec='f(){ echo "docker exec -it $1 /bin/bash;"; docker exec -it $1 /bin/bash; }; f'
+alias dbash-console='f(){ echo "docker exec -it $1 rails c;"; docker exec -it $1 rails c; }; f'
+alias dbash-run='f(){ echo "docker run --rm -it $1 /bin/bash;"; docker run --rm -it $1 /bin/bash; }; f'
+alias dcbash-exec='docker compose exec $(docker compose config --services) /bin/bash'
+alias ddwa="docker stop \$(docker ps -a -q) && docker rm \$(docker ps -a -q)" # -v remove volumes
+
+alias ls="ls -l"
+alias st="git status"
+alias s="git stash"
+alias sp="git stash pop"
+alias add="git add . && git st"
+alias reflog="git reflog --date=iso "
+alias push='function _push(){ git push $1; git st; };_push'
+alias pull="git pull && git st"
+alias lg="git lg $1"
+alias lg-all="git lga $1"
+alias reflog="git reflog --date=format:'%d-%m-%Y %H:%M:%S' $1"
+
+# -----------------------------------------------------
+# Git Alias
+# -----------------------------------------------------
+alias gbranchs="git branch"
+alias gremotes='! f() { git branch -r | egrep "$1" ; }; f'
+alias gcheck-remote='{ BRANCH=$(cat -); git fetch -p; git lg origin/$BRANCH | egrep -o "origin/staging|origin/$BRANCH"; } <<<'
+alias gcheck-local='{ BRANCH=$(cat -); git fetch -p; git lg $BRANCH | egrep -o "\(.*? $BRANCH.*?origin/$BRANCH.*?\)|\(.*?origin/$BRANCH.*? $BRANCH.*?\)"; } <<<'
+alias gcheck-current='{ BRANCH=$(git rev-parse --abbrev-ref HEAD); gcheck-local ${BRANCH}; }'
+alias grm-local-branch="git branch -D "
+alias grm-remote-branch='{ BRANCH=$(cat -); git push origin ":$BRANCH"; } <<<'
