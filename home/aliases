@@ -67,6 +67,11 @@ alias lg-all="git lga $1"
 alias reflog="git reflog --date=format:'%d-%m-%Y %H:%M:%S' $1"
 
 # -----------------------------------------------------
+# rails
+# -----------------------------------------------------
+alias rails-solid='f(){ echo "rails solid_queue:start"; rails solid_queue:start; }; f'
+
+# -----------------------------------------------------
 # Git Alias
 # -----------------------------------------------------
 alias gbranchs="git branch"
