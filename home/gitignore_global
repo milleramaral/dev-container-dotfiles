@@ -1,4 +1,10 @@
+*~
+.DS_Store
+
+config/credentials/*.key
+
 __tmp/
+**/__tmp/
 
 miac*.*
 *.miac
